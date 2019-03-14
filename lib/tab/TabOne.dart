@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'dart:convert';
+import 'package:readhub/net/HttpsUtils.dart';
+import 'package:readhub/constant/baseUrl.dart';
+import 'package:readhub/bean/NewsBean.dart';
+import 'Item.dart';
 class TabOne extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -11,36 +15,54 @@ class TabOne extends StatefulWidget{
 class _TabOne extends State<TabOne> with AutomaticKeepAliveClientMixin{
 
 
-
-   List<int> list=List.generate(50, (int index){
-      return index;
-  });
-  Future<Null> _pullToRefresh() async {
+  List<Data> _list=List();
+  Future<dynamic> _pullToRefresh() async {
 //    curPage = 1;
-    //下拉刷新做处理
-    setState(() {
-      ////改变数据，这里随意发挥
-      list = List<int>.generate(30, (i) =>i);
-    });
-    return null;
+
+    return dynamic;
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return RefreshIndicator(
-        child: ListView.builder(
-            itemCount: list.length,
+        child: ListView.separated(
+            itemCount: _list.length,
             itemBuilder: (BuildContext context,int index){
-              return Text("条目$index");
+              return Container(
+                child: Item(_list[index]),
+              );
+            },
+            separatorBuilder:(BuildContext context,int index){
+              return Container(
+                height: 10,
+                color: Colors.blueGrey,
+              );
             }
         ),
         onRefresh: ()=>_pullToRefresh());
   }
-
+  
+  loadData(){
+    HttpsUtils.getInstance().getHttp(topic,{"lastCursor":"", "pageSize": pageSize},(data){
+        debugPrint(data.toString());
+         NewsBean newsBean= NewsBean.fromJson(data);
+         debugPrint(newsBean.data[0].title);
+         this.setState((){
+           _list=newsBean.data;
+         });
+    }) ;
+  }
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-
 }
+

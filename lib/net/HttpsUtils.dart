@@ -10,12 +10,15 @@ class HttpsUtils{
        return _httpsUtils ;
      }
 
-     Future<Response> getHttp(String url) async{
+     getHttp(String url,Map<String, dynamic> queryParameters, Function callBack) async{
        Response  response;
         try{
-            response= await Dio().get(url) ;
+            response= await Dio().get(url,queryParameters: queryParameters) ;
+            if(callBack!=null){
+              callBack(response.data);
+            }
         }catch(e){
+           print(e);
         }
-       return response ;
      }
 }

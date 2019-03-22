@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Home.dart';
+import 'package:readhub/widgets/Home.dart';
+import 'package:readhub/widgets/MyWebView.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,6 +13,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
       ),
       home: Home(),
+      routes: {
+        "/MyWebView": (_) => MyWebView("")
+      },
     );
   }
 }

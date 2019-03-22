@@ -31,8 +31,8 @@ class NewsBean {
 }
 
 class Data {
-  String id;
   List<NewsArray> newsArray;
+  dynamic id;
   String createdAt;
   List<Null> eventData;
   String publishDate;
@@ -40,37 +40,41 @@ class Data {
   String title;
   String updatedAt;
   String timeline;
+  String mobileUrl;
   int order;
   Extra extra;
   bool isShowAll=false;
   bool isShowAllNews=false;
 
   Data(
-      {this.id,
+      {
         this.newsArray,
+        this.id,
         this.createdAt,
         this.eventData,
         this.publishDate,
         this.summary,
         this.title,
+        this.mobileUrl,
         this.updatedAt,
         this.timeline,
         this.order,
         this.extra});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
     if (json['newsArray'] != null) {
       newsArray = new List<NewsArray>();
       json['newsArray'].forEach((v) {
         newsArray.add(new NewsArray.fromJson(v));
       });
     }
+    id = json['id'];
     createdAt = json['createdAt'];
 
     publishDate = json['publishDate'];
     summary = json['summary'];
     title = json['title'];
+    mobileUrl = json['mobileUrl'];
     updatedAt = json['updatedAt'];
     timeline = json['timeline'];
     order = json['order'];
@@ -79,15 +83,16 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
     if (this.newsArray != null) {
       data['newsArray'] = this.newsArray.map((v) => v.toJson()).toList();
     }
+    data['id'] = this.id;
     data['createdAt'] = this.createdAt;
 
     data['publishDate'] = this.publishDate;
     data['summary'] = this.summary;
     data['title'] = this.title;
+    data['mobileUrl'] = this.mobileUrl;
     data['updatedAt'] = this.updatedAt;
     data['timeline'] = this.timeline;
     data['order'] = this.order;

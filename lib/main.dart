@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/MyWebView": (_) => MyWebView("")
       },
+
     );
   }
 }

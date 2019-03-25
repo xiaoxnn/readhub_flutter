@@ -5,8 +5,15 @@ class Setting extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-         child: Text("SEE"),
+         margin: EdgeInsets.only(top: 30),
+         child: RaisedButton(onPressed: ()=>changeTextSize(context))
     );
+  }
+
+  changeTextSize(BuildContext context){
+    
+    MediaQuery.of(context).copyWith(
+        textScaleFactor:10.0 );
   }
 
 }

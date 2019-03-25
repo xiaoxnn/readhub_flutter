@@ -18,24 +18,38 @@ class TabTwo extends StatefulWidget{
 class _TabTwo extends State<TabTwo> with AutomaticKeepAliveClientMixin{
   GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
   GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
+  GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+  footStatusChange(FooterStatus s){
+    debugPrint("FooterStatus$s");
+  }
   List<Data> _list=List();
   bool isRefresh=false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadData(-1);
+    loadData(DateUtils.getCurrentDateLong());
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    super.build(context);
     return Container(
       child: EasyRefresh(
           key: _easyRefreshKey,
           refreshHeader: MaterialHeader(
           key: _headerKey,
           ),
+        refreshFooter: ClassicsFooter(
+          key: _footerKey,
+          bgColor: Colors.transparent,
+          textColor: Colors.black87,
+          moreInfoColor: Colors.black54,
+          showMore: true,
+        ),
+         autoLoad: true,
+        footerStatusChanged: footStatusChange,
         child: ListView.separated(
             itemCount: _list.length,
             itemBuilder: (BuildContext context,int index){
@@ -57,29 +71,29 @@ class _TabTwo extends State<TabTwo> with AutomaticKeepAliveClientMixin{
     );
   }
 
-  Future<void> onRefresh() async{
-    isRefresh=true;
-    loadData(-1);
+  Future<void> onRefresh()async {
+     isRefresh=true;
+     await loadData(DateUtils.getCurrentDateLong());
   }
 
   Future<void> loadMore() async{
-    loadData(DateUtils.getCurrentDate());
-    debugPrint("@@@@@@@@@@@@@@@@@${DateUtils.getCurrentDate()}");
+    await loadData(DateUtils.dateToLong(_list[_list.length-1].publishDate));
   }
 
-  loadData(dynamic lastCursor){
-    HttpsUtils.getInstance().getHttp(news,{"lastCursor": lastCursor, "pageSize": pageSize},(data){
+  loadData(dynamic lastCursor)async{
+   await HttpsUtils.getInstance().getHttp(news,{"lastCursor": lastCursor, "pageSize": pageSize},(data){
       debugPrint(data.toString());
       NewsBean newsBean= NewsBean.fromJson(data);
-      debugPrint(newsBean.data[0].title);
       if(isRefresh){
         this.setState((){
           isRefresh=false;
           _list=newsBean.data;
+          this.setState((){});
         });
       }else{
-        _list.addAll(newsBean.data);
-        this.setState((){});
+        this.setState((){
+          _list.addAll(newsBean.data);
+        });
       }
     }) ;
   }

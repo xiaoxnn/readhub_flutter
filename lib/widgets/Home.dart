@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Setting.dart';
 import 'tab/TabOne.dart';
 import 'tab/TabTwo.dart';
 import 'tab/TabThree.dart';
@@ -17,6 +16,11 @@ class _Home extends State<Home>{
   set(BuildContext context){
     Scaffold.of(context).openEndDrawer();
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,27 +31,19 @@ class _Home extends State<Home>{
           appBar: AppBar(
             title: Text("ReadHub"),
             elevation: 0,
-            actions: <Widget>[
-                 IconButton(
-                     icon: Icon(Icons.settings),
-                 )
-            ],
             bottom: TabBar(
                 labelColor:Colors.black,
                 labelStyle: TextStyle(fontWeight: FontWeight.w600),
                 unselectedLabelColor: Colors.grey,
                 unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
                 indicatorSize: TabBarIndicatorSize.label,
-                indicatorColor: Colors.lightGreenAccent,
+                indicatorColor: Colors.blueGrey,
                 indicatorPadding:EdgeInsets.only(top: 10),
                 tabs: List.generate(titles.length, (int index){
                   return  Container(
                     child:Tab(text:titles[index]),
                   );
                 })),
-          ),
-          endDrawer: Drawer(
-             child: Setting(),
           ),
           body: TabBarView(
             children: <Widget>[

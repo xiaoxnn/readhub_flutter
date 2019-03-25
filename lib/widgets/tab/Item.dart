@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readhub/bean/NewsBean.dart';
 import 'package:readhub/widgets/MyWebView.dart';
 import 'package:readhub/utils/ToastUtils.dart';
+import 'package:readhub/utils/DateUtils.dart';
 class Item extends StatefulWidget{
   final  Data _data;
   Item(this._data);
@@ -53,7 +54,6 @@ class _Item extends State<Item> with  TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print("ddd:${_data.newsArray!=null&&_data.newsArray.length!=0}");
     return Container(
         padding: EdgeInsets.only(left: 15,right: 15,top: 10),
         color: Colors.white,
@@ -72,7 +72,7 @@ class _Item extends State<Item> with  TickerProviderStateMixin{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("8分钟"),
+                    Text(DateUtils.dateYMD(_data.publishDate)),
                     Row(
                       children: <Widget>[
                         _data.newsArray!=null&&_data.newsArray.length!=0? IconButton(icon: Icon(Icons.open_with),padding: EdgeInsets.only(right: 0),iconSize: 14, onPressed: ()=>show()):Container(height: 0,),
@@ -105,24 +105,27 @@ class _Item extends State<Item> with  TickerProviderStateMixin{
   List<Widget> hideView(List<NewsArray> newsArray) {
     return  List.generate(newsArray.length, (int index){
          if(index<=2){
-           return Container(
-             margin: EdgeInsets.only(top: 4,bottom: 6),
-             child: Row(
-               children: <Widget>[
-                 Container(
-                   margin: EdgeInsets.only(right: 10),
-                   child:  Text('$index',style: TextStyle(color: Colors.green),),
-                 ),
-                 Expanded(
-                     child: Column(
-                       crossAxisAlignment: CrossAxisAlignment.start,
-                       children: <Widget>[
-                         Text(newsArray[index].title,style: TextStyle(fontSize: 14,color: Colors.black87,fontWeight: FontWeight.w400),),
-                         Text(newsArray[index].siteName,style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),)
-                       ],
-                     )
-                 )
-               ],
+           return GestureDetector(
+             onTap:()=>showDetail(newsArray[index].url) ,
+             child: Container(
+               margin: EdgeInsets.only(top: 4,bottom: 6),
+               child: Row(
+                 children: <Widget>[
+                   Container(
+                     margin: EdgeInsets.only(right: 10),
+                     child:  Text('$index',style: TextStyle(color: Colors.green),),
+                   ),
+                   Expanded(
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: <Widget>[
+                           Text(newsArray[index].title,style: TextStyle(fontSize: 14,color: Colors.black87,fontWeight: FontWeight.w400),),
+                           Text(newsArray[index].siteName,style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),)
+                         ],
+                       )
+                   )
+                 ],
+               ),
              ),
            );
          }else if(index==3){
